@@ -1,23 +1,71 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
+  const [input, setInput] = useState('0');
+  const [result, setResult] = useState(0);
+
+  const handleButtonClick = (value) => {
+    setInput((prevInput) => {
+      prevInput = prevInput === '0' ? '' : prevInput
+      return prevInput + value
+    })
+  };
+
+  const handleCalculate = () => {
+    try {
+      const calculatedResult = eval(input);
+      setResult(calculatedResult);
+      setInput(calculatedResult.toString());
+    } catch (error) {
+      setResult('Error');
+      setInput('Error');
+    }
+  };
+
+  const handleClear = () => {
+    setInput('');
+    setResult(0);
+  };
+  const handleDelete = () => {
+    setInput((prevInput) => prevInput.slice(0, -1));
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input value={input} readOnly />
+      <div className='keypad'>
+        <div>
+          <button className='operator' onClick={() => handleClear()}>AC</button>
+          <button className='operator' onClick={() => handleDelete()}>DEL</button>
+          <button className='operator' onClick={() => handleButtonClick('%')}>%</button>
+          <button className='operator' onClick={() => handleButtonClick('/')}>/</button>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick('7')}>7</button>
+          <button onClick={() => handleButtonClick('8')}>8</button>
+          <button onClick={() => handleButtonClick('9')}>9</button>
+          <button onClick={() => handleButtonClick('*')} className='operator'>*</button>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick('4')}>4</button>
+          <button onClick={() => handleButtonClick('5')}>5</button>
+          <button onClick={() => handleButtonClick('6')}>6</button>
+          <button onClick={() => handleButtonClick('-')} className='operator'>-</button>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick('1')}>1</button>
+          <button onClick={() => handleButtonClick('2')}>2</button>
+          <button onClick={() => handleButtonClick('3')}>3</button>
+          <button onClick={() => handleButtonClick('+')} className='operator'>+</button>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick('00')}>00</button>
+          <button onClick={() => handleButtonClick('0')}>0</button>
+          <button onClick={() => handleButtonClick('.')}>.</button>
+          <button id='eqlBtn' onClick={() => handleCalculate()}>=</button>
+        </div>
+      </div>
     </div>
   );
 }
